@@ -1,0 +1,15 @@
+# Byte‑compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# PyInstaller build artifacts
+build/
+# Leave dist/ in—if you want to commit your .exe
+# otherwise you can add `dist/` here too.
+
+# VSCode settings, etc
+.vscode/
+
+*.spec
+dist/
