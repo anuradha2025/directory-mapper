@@ -29,12 +29,15 @@ def is_ignored(path, ignore_patterns, base_path):
     return False
 
 
-def map_directory(start_path, exclude_ignore=True):
+def map_directory(start_path, exclude_ignore=True, output_file=None):
     """
     Map the directory structure to 'directory_map.txt', optionally excluding
     files/folders from .gitignore.
+    Returns the directory structure as a string.
     """
-    output_file = os.path.join(os.getcwd(), "directory_map.txt")
+    if output_file is None:
+        output_file = os.path.join(os.getcwd(), "directory_map.txt")
+    
     gitignore_path = os.path.join(start_path, ".gitignore")
 
     # Decide which patterns to use
@@ -43,29 +46,36 @@ def map_directory(start_path, exclude_ignore=True):
     else:
         ignore_patterns = []
 
-    with open(output_file, "w") as f:
-        for root, dirs, files in os.walk(start_path):
-            # Filter directories and files based on ignore patterns
-            dirs[:] = [
-                d
-                for d in dirs
-                if not is_ignored(os.path.join(root, d), ignore_patterns, start_path)
-            ]
-            files = [
-                file
-                for file in files
-                if not is_ignored(os.path.join(root, file), ignore_patterns, start_path)
-            ]
+    directory_tree = []
+    
+    for root, dirs, files in os.walk(start_path):
+        # Filter directories and files based on ignore patterns
+        dirs[:] = [
+            d
+            for d in dirs
+            if not is_ignored(os.path.join(root, d), ignore_patterns, start_path)
+        ]
+        files = [
+            file
+            for file in files
+            if not is_ignored(os.path.join(root, file), ignore_patterns, start_path)
+        ]
 
-            # Calculate indentation
-            level = root.replace(start_path, "").count(os.sep)
-            indent = " " * 4 * level
-            f.write(f"{indent}|_{os.path.basename(root)}\n")
-            sub_indent = " " * 4 * (level + 1)
-            for file in files:
-                f.write(f"{sub_indent}|_{file}\n")
+        # Calculate indentation
+        level = root.replace(start_path, "").count(os.sep)
+        indent = " " * 4 * level
+        directory_tree.append(f"{indent}|_{os.path.basename(root)}")
+        sub_indent = " " * 4 * (level + 1)
+        for file in files:
+            directory_tree.append(f"{sub_indent}|_{file}")
+
+    # Write to file
+    tree_content = "\n".join(directory_tree) + "\n"
+    with open(output_file, "w") as f:
+        f.write(tree_content)
 
     print(f"Directory structure has been written to {output_file}")
+    return tree_content
 
 
 if __name__ == "__main__":

@@ -1,4 +1,0 @@
-|_testdir
-    |_test.txt
-    |_subdir
-        |_sub.txt

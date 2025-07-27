@@ -13,3 +13,11 @@ build/
 
 *.spec
 dist/
+
+# Temporary files
+*.tmp
+*~
+.DS_Store
+
+# Generated output (but keep screenshots)
+directory_map.txt
