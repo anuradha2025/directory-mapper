@@ -215,7 +215,7 @@ class DirectoryMapperGUI:
             title="Save Directory Map",
             defaultextension=".txt",
             filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
-            initialname="directory_map.txt"
+            initialfile="directory_map.txt"
         )
         
         if filename:
